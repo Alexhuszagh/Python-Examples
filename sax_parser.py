@@ -7,6 +7,7 @@ EXAMPLE = u'''<note>
 <from>Jani</from>
 <heading>Reminder</heading>
 <body>Don't forget me this weekend!</body>
+<time day="23" hour="23" minute="20">2015</time>
 </note>
 '''
 
@@ -14,7 +15,7 @@ EXAMPLE = u'''<note>
 class XMLParser(xml.sax.handler.ContentHandler):
     '''Core XML handler'''
 
-    keys = ["to", "from", "heading", "body"]
+    keys = ["to", "from", "heading", "body", "time"]
 
     def __init__(self):
         xml.sax.ContentHandler.__init__(self)
@@ -29,6 +30,11 @@ class XMLParser(xml.sax.handler.ContentHandler):
         # get data type
         if name == 'note':
             self.note = {}
+        elif name == "time":
+            self.time = True
+            self.note["day"] = attrs['day']
+            self.note["hour"] = attrs['hour']
+            self.note["minute"] = attrs['minute']
         else:
             setattr(self, name, True)
 
